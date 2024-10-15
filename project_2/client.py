@@ -25,8 +25,8 @@ def main():
             resp_flag = resp_tokens[4]
             if flag == 'it' and resp_flag == 'ns': 
                 print(resp_tokens[2])
-                resp_host , resp_port = resp_tokens[2].split(':')
-                resp_port=int(resp_port)
+                resp_host= resp_tokens[2]
+                #resp_port=int(resp_port)
                 identification += 1
                 ts_sock = socket.socket()
                 ts_sock.connect((resp_host,port))
