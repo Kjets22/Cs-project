@@ -1,0 +1,58 @@
+router interconnects links proccessing packets and moving them form one link
+to another link
+
+we tranismit data in 1 and 0 in a netowrk
+
+amplitued modilation is a way to  encode a signal so that it can understand 
+the 1s and 0s to get the encoded data
+amplitued modulation is chaing the amplitued of the singals to see the 1s and 0s
+
+frequency moduclaiton would be when you keep the amplitueud the same but you change
+the frequency to that it looks diffrent frequency
+
+phase frequency is when you send the Sin graph at a diffrente point per bit of 
+infomormation it would loke like a broken/laggin sin graph
+
+this encoding de coding happens when moving the data, each router can send diffrente
+encoding of links meaning that it has to decode data and encode the data
+
+There are diffrente types of swtiching is finding the path for the how it goes through
+the routers.
+
+Circut swtiching is where you sets up a path for the two endpoints.
+	3 things needed
+	Setup is to inlizaize and find the path to the endpoint
+	Accpet is information that you make send data
+	Data is then transmitted 
+This link is then created and then no one else can you ue the link it allows for 
+faster transmition as data as it makes a direct path where those routers are only
+used for that one transmition of data
+
+Message switching, which has an address for where it is going, this is called a 
+header which has metadata which tells how to process the data
+The message only goes through a link at a time or a node at a time, it is not allocating
+space before it happens.
+There is no setup set as it just send the message with the circut it does not need ot be 
+set up like the circut switching.
+In this case it sends the message all in one go and it all goes through the same 
+routing path but there is no reserved allocation of the routers before hand
+There is a Store and Foward Switching where it wait fro all of the bits to reach the 
+and then then it sends it out on the next link
+The internet uses store and foward delay
+
+Packet Switching, meaning that you are make it so the packets have a maxium length 
+meaning the message can be broken up into many packets
+The packets can you in parrelle, and each packet carried meta data and they can take 
+what every links they want too, they dont have to go the same way and there is no need to 
+allocate a route as it is given a header with the adress
+This aspect of eaching packet is called pipelining
+
+If a path has been setup and inlizaized it does not need a header as the router is only going
+to that one place as it has been inlizaed, but if it has not been inlizaed it needs a header to
+know where the final desation is and where it is going.
+
+The internet uses store and forward packet switching meaning that it waits for the whole
+packet to be recived before it puts it on a new links 
+
+
+

@@ -1,0 +1,24 @@
+single links have limiations so thus there are many links in the internet
+	how to turn inofrmaiton into physcial signls
+	how decides who gets to use the link at a given curret and time
+A multi link need routers to connects singles links allowing for there to 
+be a multi link network. They are able to connect links
+
+A router needs to figure hotu how to move the information from one end point
+to the other endpoint. This is know as a routing probleom. the infroamtion 
+are called packets
+
+The Network has no guarantess for the your information. This was done becasuse
+it makes it easy to build
+
+Transport has some applicaiton and gurantess to make sure that the internet is 
+reliable and works with guarantess. So one solution is that where you know if 
+the data has reached the other endpoint or not
+
+Congestion control is it make sure the router does not puch to much data into the data
+and then probleom is tasted with the endpoints. 
+
+ Packet schedualing how to know which packets should be schedualed and it what order
+
+
+
