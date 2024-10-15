@@ -1,0 +1,2 @@
+rutgers.edu 128.1.1.4
+njit.edu 10.5.6.7
