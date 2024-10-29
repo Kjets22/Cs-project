@@ -1,0 +1,7 @@
+1 www.google.com 9.7.5.6 1 ra
+1 princeton.edu java.cs.rutgers.edu 2 ns
+1 www.google.com 9.7.5.6 1 ra
+1 princeton.edu java.cs.rutgers.edu 2 ns
+1 njit.edu java.cs.rutgers.edu 4 ns
+1 x.ai 45.67.89.103 6 aa
+1 watch.tv 0.0.0.0 7 nx

@@ -1,0 +1,22 @@
+As of 2024/09/30, some changes were made from the original
+specification (released on 2024/09/25) to simplify the project
+design.
+
+1. The action of the RS during recursive resolution is changed. For
+responses received from a TS, the flags must be changed to `ra` if the
+response is authoritative.
+
+2. TS should behave exactly the same way regardless of whether a
+request arrives from the RS or the client.
+
+3. To simplify the server and client design, all servers listen on a
+single fixed port. This also simplifies the command line used to
+invoke all the programs. 
+
+4. Using the same listening port for all three server programs means
+that no two servers can run on the same machine. Your project code
+must function correctly when the three servers are run on distinct
+machines (with the same port specified in the command line).
+
+5. The sample input and output files were modified to adhere to the
+new RS and TS behaviors.

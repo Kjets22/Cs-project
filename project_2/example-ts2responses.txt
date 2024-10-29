@@ -1,0 +1,2 @@
+1 princeton.edu 0.0.0.0 3 nx
+1 njit.edu 10.5.6.7 5 aa
