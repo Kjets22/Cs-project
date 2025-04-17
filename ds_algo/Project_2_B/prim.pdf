@@ -1,0 +1,44 @@
+
+# greedy_set_cover.py
+import sys
+
+def read_sets(path):
+    """
+    Expect input file with one set per line,
+    elements separated by whitespace, e.g.:
+      1 4
+      2 3
+      1 2
+    """
+    sets = []
+    universe = set()
+    with open(path) as f:
+        for line in f:
+            elems = line.split()
+            if not elems: continue
+            s = frozenset(map(int, elems))
+            sets.append(s)
+            universe |= s
+    return sets, universe
+
+def greedy_cover(sets, universe):
+    cover = []
+    covered = set()
+    # at each step pick the set covering the most uncovered elements
+    while covered != universe:
+        best = max(sets, key=lambda s: len(s - covered))
+        cover.append(best)
+        covered |= best
+    return cover
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python greedy_set_cover.py <input_file>")
+        sys.exit(1)
+    sets, U = read_sets(sys.argv[1])
+    cover = greedy_cover(sets, U)
+    # write results
+    with open("greedy.txt", "w") as out:
+        out.write(f"{len(cover)}\n")
+        for s in cover:
+            out.write(" ".join(map(str, sorted(s))) + "\n")
