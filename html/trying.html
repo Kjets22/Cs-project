@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Boar Chat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #007bff;
+      --secondary-color: #0056b3;
+      --bg-color: #f9fafc;
+      --white: #ffffff;
+      --user-bg: #d0e8ff;
+      --user-text: #003e7e;
+      --bot-bg: #f3e8ff;     /* Pastel purple for bot messages */
+      --bot-text: #6a1b9a;    /* Dark purple for bot text */
+      --bot-avatar: #8e24aa;  /* Rich purple for bot avatar */
+      --shadow-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    /* Chat container takes up 70% of the viewport width */
+    #chat-container {
+      width: 70vw;
+      height: 95vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 12px 24px var(--shadow-color);
+      overflow: hidden;
+    }
+    
+    /* Header with gradient background */
+    #chat-header {
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      color: var(--white);
+      padding: 24px;
+      font-size: 1.75rem;
+      text-align: center;
+      font-weight: 600;
+    }
+    
+    /* Messages container with scroll */
+    #messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      background: #f6f8fa;
+    }
+    
+    /* Message card container */
+    .message {
+      display: flex;
+      margin-bottom: 20px;
+      align-items: flex-start;
+      animation: slideIn 0.4s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    /* Reverse flex order for user messages */
+    .message.user {
+      flex-direction: row-reverse;
+    }
+    
+    /* Avatar styling */
+    .message .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary-color);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      margin: 0 12px;
+      flex-shrink: 0;
+    }
+    
+    .message.bot .avatar {
+      background: var(--bot-avatar);
+    }
+    
+    /* Chat card style (innovative alternative to bubbles) */
+    .chat-card {
+      max-width: 80%;
+      padding: 16px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px var(--shadow-color);
+      background: var(--bot-bg);
+      color: var(--bot-text);
+      position: relative;
+    }
+    
+    /* Specific style for user cards */
+    .message.user .chat-card {
+      background: var(--user-bg);
+      color: var(--user-text);
+    }
+    
+    /* Input area styling with a glassmorphism effect */
+    .input-area {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid #ddd;
+    }
+    
+    .input-area input {
+      flex: 1;
+      font-size: 1.1rem;
+      padding: 14px 18px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      margin-right: 12px;
+      transition: border-color 0.3s ease;
+    }
+    
+    .input-area input:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+    }
+    
+    .input-area button {
+      background: var(--primary-color);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      padding: 14px 22px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    
+    .input-area button:hover {
+      background: var(--secondary-color);
+      transform: scale(1.03);
+    }
+    
+    /* Blinking animation for progress indicator */
+    .blink {
+      animation: blink-animation 1s steps(5, start) infinite;
+    }
+    
+    @keyframes blink-animation {
+      to { visibility: hidden; }
+    }
+    
+    /* Feedback button styling */
+    .feedback {
+      display: flex;
+      align-items: center;
+      margin-top: 8px;
+    }
+    
+    .feedback button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      margin-right: 12px;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+    
+    .feedback button:hover {
+      color: var(--primary-color);
+      transform: scale(1.2);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      #chat-container { width: 90vw; height: 90vh; }
+      #chat-header { font-size: 1.5rem; padding: 16px; }
+      .input-area button { padding: 12px 18px; }
+      .message .avatar { width: 32px; height: 32px; margin: 0 8px; }
+      .chat-card { padding: 12px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="chat-container">
+    <div id="chat-header">Boar Chat</div>
+    <div id="messages"></div>
+    <div class="input-area">
+      <input type="text" id="question" placeholder="Ask a question..." onkeydown="if (event.key === 'Enter') sendQuestion()" />
+      <button id="sendStopButton" onclick="sendQuestion()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    // Utility to convert **bold** markers to HTML bold tags.
+    function convertDoubleAsterisksToBold(text) {
+      return text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    }
+
+    // Update or create the progress indicator as an innovative card
+    function updateProgressIndicator(message) {
+      let progressCard = document.getElementById('progress-card');
+      if (!progressCard) {
+        const messageContainer = document.createElement('div');
+        messageContainer.className = 'message bot';
+        
+        const avatar = document.createElement('div');
+        avatar.className = 'avatar';
+        avatar.textContent = 'B';
+        messageContainer.appendChild(avatar);
+        
+        progressCard = document.createElement('div');
+        progressCard.id = 'progress-card';
+        progressCard.className = 'chat-card';
+        messageContainer.appendChild(progressCard);
+        document.getElementById('messages').appendChild(messageContainer);
+      }
+      
+      progressCard.innerHTML = `<div class="blink">${message}</div>`;
+      document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+    }
+
+    // Remove the progress indicator.
+    function removeProgressIndicator() {
+      const progressCard = document.getElementById('progress-card');
+      if (progressCard && progressCard.parentNode) {
+        progressCard.parentNode.parentNode.remove();
+      }
+    }
+
+    // Append feedback buttons (thumbs up/down) to the provided container.
+    function addFeedbackButtons(container) {
+      const feedbackDiv = document.createElement('div');
+      feedbackDiv.className = 'feedback';
+      feedbackDiv.innerHTML = 
+        '<button onclick="sendFeedback(\'up\')">👍</button>' +
+        '<button onclick="sendFeedback(\'down\')">👎</button>';
+      container.appendChild(feedbackDiv);
+    }
+
+    async function sendQuestion() {
+      const button = document.getElementById('sendStopButton');
+      if (button.innerText === 'Stop') {
+        await fetch('/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ stop: true })
+        });
+        return;
+      }
+      
+      const questionInput = document.getElementById('question');
+      const question = questionInput.value.trim();
+      if (!question) return;
+      
+      const messages = document.getElementById('messages');
+      // Create user message card.
+      const userMessage = document.createElement('div');
+      userMessage.className = 'message user';
+      
+      const userAvatar = document.createElement('div');
+      userAvatar.className = 'avatar';
+      userAvatar.textContent = 'U';
+      userMessage.appendChild(userAvatar);
+      
+      const userCard = document.createElement('div');
+      userCard.className = 'chat-card';
+      userCard.innerHTML = `You: ${question}`;
+      userMessage.appendChild(userCard);
+      
+      messages.appendChild(userMessage);
+      messages.scrollTop = messages.scrollHeight;
+      
+      questionInput.value = '';
+      button.innerText = 'Stop';
+      
+      try {
+        const response = await fetch('/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ question })
+        });
+        
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+        
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop();
+          
+          for (const line of lines) {
+            if (!line.trim()) continue;
+            try {
+              const data = JSON.parse(line);
+              
+              if (data.progress) {
+                updateProgressIndicator(data.progress);
+              }
+              
+              if (data.sql_query !== undefined) {
+                const botMessage = document.createElement('div');
+                botMessage.className = 'message bot';
+                
+                const botAvatar = document.createElement('div');
+                botAvatar.className = 'avatar';
+                botAvatar.textContent = 'B';
+                botMessage.appendChild(botAvatar);
+                
+                const sqlCard = document.createElement('div');
+                sqlCard.className = 'chat-card';
+                sqlCard.innerHTML = `<pre>SQL Query: ${data.sql_query}</pre>`;
+                botMessage.appendChild(sqlCard);
+                
+                messages.appendChild(botMessage);
+                messages.scrollTop = messages.scrollHeight;
+              }
+              
+              if (data.results !== undefined) {
+                removeProgressIndicator();
+                const botMessage = document.createElement('div');
+                botMessage.className = 'message bot';
+                
+                const botAvatar = document.createElement('div');
+                botAvatar.className = 'avatar';
+                botAvatar.textContent = 'B';
+                botMessage.appendChild(botAvatar);
+                
+                const resultsText = typeof data.results === 'string'
+                  ? data.results
+                  : JSON.stringify(data.results, null, 2);
+                const boldedText = convertDoubleAsterisksToBold(resultsText);
+                
+                const resultCard = document.createElement('div');
+                resultCard.className = 'chat-card';
+                resultCard.innerHTML = `<pre>${boldedText}</pre>`;
+                botMessage.appendChild(resultCard);
+                
+                messages.appendChild(botMessage);
+                addFeedbackButtons(resultCard);
+                messages.scrollTop = messages.scrollHeight;
+              }
+              
+              if (data.error) {
+                removeProgressIndicator();
+                const botMessage = document.createElement('div');
+                botMessage.className = 'message bot';
+                
+                const botAvatar = document.createElement('div');
+                botAvatar.className = 'avatar';
+                botAvatar.textContent = 'B';
+                botMessage.appendChild(botAvatar);
+                
+                const errorCard = document.createElement('div');
+                errorCard.className = 'chat-card';
+                errorCard.innerHTML = `Error: ${data.error}`;
+                botMessage.appendChild(errorCard);
+                
+                messages.appendChild(botMessage);
+                messages.scrollTop = messages.scrollHeight;
+              }
+            } catch (err) {
+              console.error("Error parsing streamed data:", err);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        const botMessage = document.createElement('div');
+        botMessage.className = 'message bot';
+        
+        const botAvatar = document.createElement('div');
+        botAvatar.className = 'avatar';
+        botAvatar.textContent = 'B';
+        botMessage.appendChild(botAvatar);
+        
+        const errorCard = document.createElement('div');
+        errorCard.className = 'chat-card';
+        errorCard.innerHTML = `Error: ${error.message}`;
+        botMessage.appendChild(errorCard);
+        
+        messages.appendChild(botMessage);
+        messages.scrollTop = messages.scrollHeight;
+      } finally {
+        button.innerText = 'Send';
+      }
+    }
+    
+    async function sendFeedback(feedback) {
+      try {
+        await fetch('/feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ feedback })
+        });
+      } catch (error) {
+        console.error('Error sending feedback:', error);
+        alert('An error occurred while sending feedback.');
+      }
+    }
+  </script>
+</body>
+</html>
